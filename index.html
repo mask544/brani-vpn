@@ -74,14 +74,64 @@
   <div class="logo">Б</div>
   <div id="cards"></div>
 </div>
+<style>
+  .cta{border-radius:24px;background:rgba(6,40,38,.92);border:1.5px solid var(--line);overflow:hidden}
+  .cta .note{margin:0;padding:11px 0 10px;font-size:13.5px;color:var(--txt);display:flex;gap:7px;justify-content:center;align-items:center}
+  .cta .note i{width:18px;height:18px;border-radius:50%;background:var(--mint);color:#04261f;font-style:normal;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .cta button{border-radius:20px;margin:0}
+  .foot#foot{margin-top:12px;font-size:13.5px;color:var(--txt);opacity:.85}
+  /* окно оплаты */
+  .sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s}
+  .sheet-bg.on{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    border-radius:28px 28px 0 0;padding:10px 22px 28px;
+    background:radial-gradient(90% 70% at 0% 100%,#0e6b56 0%,transparent 70%),radial-gradient(80% 60% at 100% 0%,#0b4a44 0%,transparent 70%),#05211f}
+  .sheet.on{transform:none}
+  .sheet .in{max-width:460px;margin:0 auto}
+  .grab{width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.25);margin:0 auto 18px}
+  .sh-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .sh-top b{font-family:Unbounded;font-size:17px;letter-spacing:.3px}
+  .pill{padding:7px 14px;border-radius:14px;background:rgba(0,0,0,.35);border:1px solid var(--line);font-weight:700;font-size:13px}
+  .pay-ru{width:100%;border:0;border-radius:20px;background:#fff;padding:16px 10px 14px;cursor:pointer;display:block}
+  .logos{display:flex;align-items:center;justify-content:center;gap:14px;height:28px}
+  .l-visa{font:italic 900 24px/1 Arial,sans-serif;color:#1a1f71;letter-spacing:-.5px}
+  .l-mc{position:relative;width:38px;height:24px}
+  .l-mc:before,.l-mc:after{content:"";position:absolute;top:0;width:24px;height:24px;border-radius:50%}
+  .l-mc:before{left:0;background:#eb001b}.l-mc:after{right:0;background:#f79e1b;mix-blend-mode:multiply}
+  .l-mir{font:900 24px/1 Arial,sans-serif;color:#0f754e;letter-spacing:.5px}
+  .l-sbp{display:flex;align-items:center;gap:4px;font:700 13px/1 Arial,sans-serif;color:#1d1346}
+  .l-sbp span{width:0;height:0;border-left:12px solid #5b57a2;border-top:8px solid transparent;border-bottom:8px solid transparent}
+  .pay-ru .t{margin-top:8px;font-family:Unbounded;font-weight:700;font-size:17px;color:#06302a}
+  .pay-fx{width:100%;margin-top:14px;border:1.5px solid var(--line);border-radius:20px;background:rgba(0,0,0,.35);color:var(--txt);
+    padding:20px 10px;font-family:Manrope;font-weight:700;font-size:16px;cursor:pointer}
+  .legal{margin-top:20px;text-align:center;font-size:13px;line-height:1.6;color:var(--txt);opacity:.85}
+  .legal a{color:inherit}
+  .cancel{margin-top:12px;text-align:center;font-size:13px;color:var(--mut)}
+</style>
 <div class="bottom"><div class="in">
-  <div class="note">✓ Отключить продление можно в любой момент</div>
-  <button id="go">Подключить</button>
+  <div class="cta">
+    <div class="note"><i>✓</i>Можно отменить в любое время</div>
+    <button id="go">Подключить</button>
+  </div>
   <div class="foot" id="foot"></div>
-  <div class="foot" style="font-size:11.5px;margin-top:6px">Оплачивая, вы соглашаетесь с
-    <a href="docs.html#privacy" style="color:inherit">Политикой</a>,
-    <a href="docs.html#offer" style="color:inherit">Офертой</a> и
-    <a href="docs.html#rules" style="color:inherit">Правилами</a></div>
+</div></div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet"><div class="in">
+  <div class="grab"></div>
+  <div class="sh-top"><b>БРАНИ VPN</b><span class="pill">RUB</span></div>
+  <button class="pay-ru" id="payRu">
+    <div class="logos">
+      <span class="l-visa">VISA</span><span class="l-mc"></span><span class="l-mir">МИР</span>
+      <span class="l-sbp"><span></span>СБП</span>
+    </div>
+    <div class="t" id="payRuT">Оплатить</div>
+  </button>
+  <button class="pay-fx" id="payFx">Оплатить зарубежной валютой</button>
+  <div class="legal">Оплачивая подписку, вы соглашаетесь с
+    <a href="docs.html#offer">офертой</a>, <a href="docs.html#privacy">политикой конфиденциальности</a>
+    и <a href="docs.html#rules">правилами пользования</a>.</div>
+  <div class="cancel">Отменить подписку можно в любой момент</div>
 </div></div>
 <script>
   const tg = window.Telegram && Telegram.WebApp;
@@ -109,16 +159,28 @@
     });
     const t = T.find(x => x.k === sel);
     document.getElementById('go').textContent = trial ? `Подключить за ${TRIAL_PRICE} ₽` : `Оплатить ${rub(t.p)}`;
-    document.getElementById('foot').innerHTML = trial
-      ? `Сейчас — ${TRIAL_DAYS} дня за ${TRIAL_PRICE} ₽<br>Потом — ${rub(t.p)} за ${t.label}`
+    const word = TRIAL_DAYS % 10 === 1 && TRIAL_DAYS !== 11 ? 'день' : TRIAL_DAYS < 5 ? 'дня' : 'дней';
+    document.getElementById('foot').textContent = trial
+      ? `Через ${TRIAL_DAYS} ${word} — ${rub(t.p)} за ${t.label}`
       : `${t.label} — ${rub(t.p)}`;
+    document.getElementById('payRuT').textContent = `Оплатить ${trial ? TRIAL_PRICE + ' ₽' : rub(t.p)}`;
   }
+  const sheet = document.getElementById('sheet'), bg = document.getElementById('sheetBg');
+  const openSheet = on => { sheet.classList.toggle('on', on); bg.classList.toggle('on', on);
+    if (tg && tg.BackButton) on ? tg.BackButton.show() : tg.BackButton.hide(); };
+  if (tg && tg.BackButton) tg.BackButton.onClick(() => openSheet(false));
+  bg.onclick = () => openSheet(false);
   document.getElementById('go').onclick = () => {
+    tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); openSheet(true);
+  };
+  const pay = mode => {
     const bot = q.get('bot') || 'brani_vpn_bot';
-    const link = `https://t.me/${bot}?start=pay_${sel}`;
+    const link = `https://t.me/${bot}?start=${mode}_${sel}`;
     if (tg && tg.initData) { tg.openTelegramLink(link); tg.close(); }
     else { location.href = link; }
   };
+  document.getElementById('payRu').onclick = () => pay('pay');      // карты РФ / СБП (ЮKassa)
+  document.getElementById('payFx').onclick = () => pay('payfx');    // зарубежные карты (Telegram Stars)
   draw();
 </script>
 </body>
