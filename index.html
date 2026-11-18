@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Брани VPN</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg1:#04161a;--bg2:#0b3a3a;--mint:#4dffc3;--mint2:#1fd6a0;--card:rgba(255,255,255,.06);--line:rgba(120,255,210,.25);--txt:#eafff7;--mut:#9cc9bd}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Manrope,system-ui,sans-serif;color:var(--txt);min-height:100vh;
+    background:radial-gradient(120% 60% at 100% 0%,#0f6b5a 0%,transparent 60%),
+               radial-gradient(90% 50% at 0% 100%,#0b3f63 0%,transparent 60%),
+               linear-gradient(180deg,var(--bg1),var(--bg2));}
+  .wrap{max-width:460px;margin:0 auto;padding:28px 18px 200px}
+  h1{font-family:Unbounded,sans-serif;font-weight:700;font-size:34px;line-height:1.08;letter-spacing:-.5px}
+  h1 span{color:var(--mint)}
+  .sub{margin-top:10px;font-weight:700;font-size:14px;color:var(--mut)}
+  .logo{margin:26px auto 30px;width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:#0a2a2c;border:6px solid var(--mint);box-shadow:0 0 40px rgba(77,255,195,.45),inset 0 0 30px rgba(77,255,195,.15);
+    font-family:Unbounded,sans-serif;font-weight:700;font-size:78px;color:#fff}
+  .card{position:relative;margin-top:26px;padding:16px 18px;border-radius:22px;background:var(--card);border:1.5px solid var(--line);
+    display:flex;justify-content:space-between;align-items:flex-end;cursor:pointer;transition:.2s;backdrop-filter:blur(6px)}
+  .card.on{border-color:var(--mint);background:rgba(77,255,195,.12);box-shadow:0 0 24px rgba(77,255,195,.25)}
+  .term{font-weight:700;font-size:16px;color:var(--mut)}
+  .price{margin-top:8px;font-family:Unbounded,sans-serif;font-weight:700;font-size:26px}
+  .price s{font-size:18px;color:var(--mut);margin-right:8px;font-weight:500}
+  .pm{text-align:right;font-family:Unbounded,sans-serif;font-weight:700;font-size:19px;line-height:1.15}
+  .pm small{display:block;font-size:13px;color:var(--mut);font-family:Manrope}
+  .badge{position:absolute;top:-13px;right:16px;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:700;background:var(--mint);color:#04261f}
+  .bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 18px 22px;background:linear-gradient(180deg,rgba(6,34,36,0) 0,rgba(6,34,36,.98) 16px)}
+  .bottom .in{max-width:460px;margin:0 auto}
+  .note{text-align:center;font-size:13px;color:var(--mut);margin-bottom:10px}
+  .note b{color:var(--mint)}
+  button{width:100%;border:0;border-radius:18px;padding:18px;font-family:Unbounded,sans-serif;font-weight:700;font-size:18px;
+    color:#04261f;background:linear-gradient(90deg,var(--mint),var(--mint2));cursor:pointer}
+  .foot{margin-top:10px;text-align:center;font-size:12.5px;color:var(--mut);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span>Брани VPN</span> — включил и забыл.</h1>
+  <div class="sub">Любой тариф = 2 устройства.</div>
+  <div class="logo">Б</div>
+  <div id="cards"></div>
+</div>
+<div class="bottom"><div class="in">
+  <div class="note">✓ Отключить продление можно в любой момент</div>
+  <button id="go">Подключить</button>
+  <div class="foot" id="foot"></div>
+</div></div>
+<script>
+  const tg = window.Telegram && Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#04161a'); }
+  const q = new URLSearchParams(location.search);
+  const trial = q.get('trial') !== '0';
+  const TRIAL_DAYS = +(q.get('days') || 3), TRIAL_PRICE = +(q.get('tp') || 10);
+  const T = [
+    {k:'12m', m:12, p:1990, old:2989, label:'12 месяцев'},
+    {k:'6m',  m:6,  p:1190, old:1494, label:'6 месяцев', hit:'Выбор большинства'},
+    {k:'1m',  m:1,  p:249,  old:null, label:'1 месяц'},
+  ];
+  let sel = q.get('tariff') || '6m';
+  const rub = n => n.toLocaleString('ru-RU') + ' ₽';
+  function draw(){
+    document.getElementById('cards').innerHTML = T.map(t => `
+      <div class="card ${t.k===sel?'on':''}" data-k="${t.k}">
+        ${t.k==='12m' ? '<div class="badge">Выгоднее всего</div>' : t.hit ? `<div class="badge">${t.hit}</div>` : ''}
+        <div><div class="term">${t.label}</div>
+          <div class="price">${t.old?`<s>${rub(t.old)}</s>`:''}${rub(t.p)}</div></div>
+        <div class="pm">${Math.floor(t.p/t.m)} ₽<small>в месяц</small></div>
+      </div>`).join('');
+    document.querySelectorAll('.card').forEach(c => c.onclick = () => {
+      sel = c.dataset.k; tg && tg.HapticFeedback && tg.HapticFeedback.selectionChanged(); draw();
+    });
+    const t = T.find(x => x.k === sel);
+    document.getElementById('go').textContent = trial ? `Подключить за ${TRIAL_PRICE} ₽` : `Оплатить ${rub(t.p)}`;
+    document.getElementById('foot').innerHTML = trial
+      ? `Сейчас — ${TRIAL_DAYS} дня за ${TRIAL_PRICE} ₽<br>Потом — ${rub(t.p)} за ${t.label}`
+      : `${t.label} — ${rub(t.p)}`;
+  }
+  document.getElementById('go').onclick = () => {
+    const bot = q.get('bot') || 'brani_vpn_bot';
+    const link = `https://t.me/${bot}?start=pay_${sel}`;
+    if (tg && tg.initData) { tg.openTelegramLink(link); tg.close(); }
+    else { location.href = link; }
+  };
+  draw();
+</script>
+</body>
+</html>
