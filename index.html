@@ -67,16 +67,29 @@
   var tg=window.Telegram&&Telegram.WebApp;
   if(tg){try{tg.setBackgroundColor('#020a0b');tg.setHeaderColor('#020a0b');}catch(e){}}
   setTimeout(function(){s.classList.add('p2')},450);
-  function fin(){setTimeout(function(){s.classList.add('done');setTimeout(function(){s.remove()},500)},Math.max(0,1400-(Date.now()-t0)))}
+  var fired=false;function fin(){if(fired)return;fired=true;setTimeout(function(){document.body.classList.add('ready');s.classList.add('done');setTimeout(function(){s.remove()},500)},Math.max(0,1400-(Date.now()-t0)))}
   window.addEventListener('load',function(){(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fin)});
   setTimeout(fin,4000);
 })();
 </script>
+<style>
+  /* анимация появления после заставки: текст и тарифы → логотип с 3D-поворотом → кнопка снизу */
+  .a1,.a2,.a3{opacity:0}
+  body.ready .a1{animation:fadeUp .38s ease-out both}
+  body.ready .a2{animation:logoIn .65s cubic-bezier(.2,.8,.2,1) .12s both,logoFloat 6s ease-in-out .8s infinite}
+  body.ready .a3{animation:fadeUp .42s ease-out .5s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes logoIn{from{opacity:0;transform:perspective(600px) rotateY(-40deg) scale(.78)}
+                    to{opacity:1;transform:perspective(600px) rotateY(0) scale(1)}}
+  @keyframes logoFloat{0%,100%{transform:perspective(600px) rotateY(0) rotateX(0)}
+                       25%{transform:perspective(600px) rotateY(14deg) rotateX(5deg)}
+                       75%{transform:perspective(600px) rotateY(-14deg) rotateX(-4deg)}}
+</style>
 <div class="wrap">
-  <h1><span>Брани VPN</span> — включил и забыл.</h1>
-  <div class="sub">Любой тариф = 2 устройства.</div>
-  <div class="logo">Б</div>
-  <div id="cards"></div>
+  <h1 class="a1"><span>Брани VPN</span> — включил и забыл.</h1>
+  <div class="sub a1">Любой тариф = 2 устройства.</div>
+  <div class="logo a2">Б</div>
+  <div id="cards" class="a1"></div>
 </div>
 <style>
   .cta{border-radius:24px;background:rgba(6,40,38,.92);border:1.5px solid var(--line);overflow:hidden}
@@ -114,7 +127,7 @@
   .legal a{color:inherit}
   .cancel{margin-top:12px;text-align:center;font-size:13px;color:var(--mut)}
 </style>
-<div class="bottom"><div class="in">
+<div class="bottom a3"><div class="in">
   <div class="cta">
     <div class="note"><i>✓</i>Можно отменить в любое время</div>
     <button id="go">Подключить</button>
