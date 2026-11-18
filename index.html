@@ -40,6 +40,34 @@
 </style>
 </head>
 <body>
+<div id="splash"><div class="sl">Б</div><div class="spin"></div></div>
+<style>
+  html{background:#020a0b}
+  #splash{position:fixed;inset:0;z-index:99;background:#020a0b;display:flex;align-items:center;justify-content:center;transition:opacity .45s}
+  #splash::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .7s;
+    background:radial-gradient(55% 40% at 0% 66%,#19f0a8 0%,transparent 62%),
+               radial-gradient(70% 45% at 100% 100%,#0f9a74 0%,transparent 62%),
+               radial-gradient(85% 55% at 45% 62%,#075443 0%,transparent 72%)}
+  #splash.p2::before{opacity:1}
+  #splash .sl{position:relative;font-family:Unbounded,Bahnschrift,Arial,sans-serif;font-weight:700;font-size:150px;color:#0b2a25;transition:opacity .35s}
+  #splash.p2 .sl{opacity:0}
+  #splash .spin{position:absolute;width:46px;height:46px;border-radius:50%;border:3px solid rgba(77,255,195,.22);border-top-color:#4dffc3;
+    animation:bspin .8s linear infinite;opacity:0;transition:opacity .35s}
+  #splash.p2 .spin{opacity:1}
+  #splash.done{opacity:0;pointer-events:none}
+  @keyframes bspin{to{transform:rotate(360deg)}}
+</style>
+<script>
+(function(){
+  var s=document.getElementById('splash'),t0=Date.now();
+  var tg=window.Telegram&&Telegram.WebApp;
+  if(tg){try{tg.setBackgroundColor('#020a0b');tg.setHeaderColor('#020a0b');}catch(e){}}
+  setTimeout(function(){s.classList.add('p2')},450);
+  function fin(){setTimeout(function(){s.classList.add('done');setTimeout(function(){s.remove()},500)},Math.max(0,1400-(Date.now()-t0)))}
+  window.addEventListener('load',function(){(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(fin)});
+  setTimeout(fin,4000);
+})();
+</script>
 <div class="wrap">
   <h1><span>Брани VPN</span> — включил и забыл.</h1>
   <div class="sub">Любой тариф = 2 устройства.</div>
