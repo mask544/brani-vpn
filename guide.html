@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Инструкции — Брани VPN</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Manrope,system-ui,sans-serif;color:#eafff7;line-height:1.6;font-size:15.5px;
+    background:radial-gradient(120% 50% at 100% 0%,#0f6b5a 0%,transparent 60%),linear-gradient(180deg,#04161a,#0b3a3a);min-height:100vh}
+  .wrap{max-width:720px;margin:0 auto;padding:26px 18px 60px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .logo{width:46px;height:46px;border-radius:50%;border:3px solid #4dffc3;display:flex;align-items:center;justify-content:center;
+    font-family:Unbounded;font-weight:700;font-size:22px;box-shadow:0 0 16px rgba(77,255,195,.4)}
+  h1{font-family:Unbounded;font-size:22px}
+  nav{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
+  nav a{padding:7px 12px;border-radius:12px;border:1.5px solid rgba(120,255,210,.3);color:#4dffc3;text-decoration:none;font-weight:700;font-size:13px}
+  section{margin-top:22px;padding:18px;border-radius:20px;background:rgba(255,255,255,.05);border:1.5px solid rgba(120,255,210,.18);scroll-margin-top:12px}
+  section:target{border-color:#4dffc3;box-shadow:0 0 18px rgba(77,255,195,.25)}
+  h2{font-family:Unbounded;font-size:17px;margin-bottom:10px;color:#4dffc3}
+  ol,ul{margin-left:20px} li{margin:5px 0;color:#d4efe8}
+  b{color:#fff} code{background:rgba(0,0,0,.35);padding:1px 6px;border-radius:6px}
+  table{width:100%;border-collapse:collapse;margin-top:6px} td{padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+  td:last-child{text-align:right;font-weight:700}
+  .btn{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:14px;background:#4dffc3;color:#04261f;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">Б</div><h1>Инструкции</h1></header>
+  <nav>
+    <a href="#tariffs">Тарифы</a><a href="#connect">Подключение</a><a href="#manual">Вручную</a><a href="#tv">Телевизор</a>
+    <a href="#devices">Устройства</a><a href="#platforms">Платформы</a><a href="#partner">Партнёрка</a>
+  </nav>
+
+  <section id="tariffs">
+    <h2>📋 Тарифы</h2>
+    <table>
+      <tr><td>Пробная подписка — 3 дня</td><td>10 ₽</td></tr>
+      <tr><td>1 месяц</td><td>249 ₽</td></tr>
+      <tr><td>6 месяцев (198 ₽/мес)</td><td>1 190 ₽</td></tr>
+      <tr><td>12 месяцев (165 ₽/мес)</td><td>1 990 ₽</td></tr>
+    </table>
+    <p style="margin-top:10px">Любой тариф — до 2 устройств и безлимитный трафик. После пробного периода подписка
+      продлевается автоматически по выбранному тарифу; отключить автопродление можно в «Личном кабинете» в любой момент.</p>
+  </section>
+
+  <section id="connect">
+    <h2>📲 Подключение подписки</h2>
+    <ol>
+      <li>Установите приложение: <b>Happ</b> или <b>v2RayTun</b> (iPhone, Android), <b>Hiddify</b> (Windows, Mac, Android).</li>
+      <li>В боте откройте <b>👤 Личный кабинет</b> и нажмите на ссылку из блока «Ваша подписка» — она скопируется.</li>
+      <li>В приложении нажмите <b>«+»</b> → <b>«Импорт из буфера обмена»</b>.</li>
+      <li>Появится список стран. Выберите любую и включите VPN.</li>
+    </ol>
+    <p style="margin-top:8px">Если страна перестала работать — выберите другую. Список обновляется сам.</p>
+  </section>
+
+  <section id="manual">
+    <h2>🔗 Подключение вручную</h2>
+    <ol>
+      <li>Откройте ссылку-подписку из «Личного кабинета» в браузере — там текстовый список ключей <code>vless://…</code>.</li>
+      <li>Скопируйте нужный ключ и вставьте в приложение через «Импорт из буфера».</li>
+      <li>Если приложение не принимает подписки, добавляйте ключи по одному так же.</li>
+    </ol>
+  </section>
+
+  <section id="tv">
+    <h2>📺 Подключение телевизора</h2>
+    <ol>
+      <li>На Android TV установите <b>v2RayTun</b> или <b>Happ</b> из Google Play.</li>
+      <li>Отправьте ссылку-подписку себе в Telegram на ТВ или наберите её через «Добавить по ссылке».</li>
+      <li>Включите VPN. Телевизор займёт одно устройство из лимита.</li>
+    </ol>
+  </section>
+
+  <section id="devices">
+    <h2>➕ Докупить устройства</h2>
+    <p>В «Личном кабинете» нажмите <b>«Докупить устройства»</b>. Каждое дополнительное устройство — <b>99 ₽</b>
+      до конца текущей подписки. Подключено слишком много? Нажмите «Сменить ключ подписки» — старая ссылка перестанет работать.</p>
+  </section>
+
+  <section id="platforms">
+    <h2>💻 Доступные платформы</h2>
+    <ul>
+      <li><b>iPhone / iPad</b> — Happ, v2RayTun</li>
+      <li><b>Android</b> — Happ, v2RayTun, Hiddify</li>
+      <li><b>Windows / macOS</b> — Hiddify, Happ</li>
+      <li><b>Android TV</b> — v2RayTun, Happ</li>
+      <li><b>Linux</b> — Hiddify</li>
+    </ul>
+  </section>
+
+  <section id="partner">
+    <h2>🤝 Партнёрская программа</h2>
+    <p>Приглашайте друзей по своей ссылке из бота и получайте <b>25%</b> с каждой их оплаты на баланс.
+      Балансом можно оплачивать подписку, вывод — через поддержку.</p>
+    <a class="btn" href="https://t.me/brani_vpn_bot">Открыть бота</a>
+  </section>
+</div>
+</body>
+</html>
